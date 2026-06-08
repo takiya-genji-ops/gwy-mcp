@@ -23,6 +23,8 @@ venv/
 Thumbs.db
 
 # Data
-data/
+data/*.json
+data/*.csv
+!src/gwy_mcp/data/
 *.db
 *.sqlite3
