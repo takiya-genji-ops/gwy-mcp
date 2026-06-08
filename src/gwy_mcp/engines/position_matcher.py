@@ -51,10 +51,17 @@ def _get_patch_category(major: str) -> str | None:
 # ---------------------------------------------------------------------------
 
 def _match_education(user_edu: str, required_edu: str) -> bool:
-    user_rank = _EDUCATION_RANK.get(user_edu, 0)
-    req_rank = _EDUCATION_RANK.get(required_edu, 0)
-    if req_rank == 0:
-        return required_edu in user_edu
+    user_rank = _EDUCATION_RANK.get(user_edu, -1)
+
+    # 处理复合要求如 "专科及以上"/"本科及以上"
+    req_clean = required_edu
+    if "及以上" in req_clean:
+        req_clean = req_clean.replace("及以上", "")
+    req_rank = _EDUCATION_RANK.get(req_clean, -1)
+
+    if req_rank == -1:
+        # 无法识别，回退到子串匹配
+        return required_edu in user_edu or req_clean in user_edu
     return user_rank >= req_rank
 
 
@@ -89,13 +96,14 @@ def _match_major(user_major: str, required_majors: list[str]) -> tuple[bool, str
             matched.append(req_clean)
         elif _is_major_in_category(user_major, req_clean):
             matched.append(f"{req_clean}(类别/补丁匹配)")
+        elif _resolve_alias(user_major) == req_clean:
+            matched.append(f"{req_clean}(别名:{user_major})")
         elif "相关" in req_clean:
             base = req_clean.replace("相关专业", "").replace("相关", "")
             if base and (base in user_major or _is_major_in_category(user_major, base)):
                 matched.append(req_clean)
     if matched:
         return True, f"专业匹配: {'，'.join(matched)}"
-    return False, f"专业不匹配: 要求{required_majors}, 用户专业为{user_major}"
     return False, f"专业不匹配: 要求{required_majors}, 用户专业为{user_major}"
 
 
