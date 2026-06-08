@@ -125,7 +125,7 @@ async def test_llm_extraction():
     print("Test 3: LLM 公告解析")
     print("=" * 50)
 
-    if not config.anthropic_api_key:
+    if not config.deepseek_api_key:
         print("  SKIP - 未配置 ANTHROPIC_API_KEY")
         print("  在 .env 文件中设置 ANTHROPIC_API_KEY 后重试")
         print()
@@ -155,7 +155,7 @@ async def test_full_pipeline():
     print("Test 4: 完整选岗流程")
     print("=" * 50)
 
-    if not config.anthropic_api_key:
+    if not config.deepseek_api_key:
         print("  SKIP - 未配置 ANTHROPIC_API_KEY")
         print()
         return
@@ -195,8 +195,8 @@ async def main():
 
     print("=" * 50)
     print("冒烟测试完成!")
-    print(f"  API key 已配置: {bool(config.anthropic_api_key)}")
-    if not config.anthropic_api_key:
+    print(f"  API key 已配置: {bool(config.deepseek_api_key)}")
+    if not config.deepseek_api_key:
         print("  [提示] 在 .env 中设置 ANTHROPIC_API_KEY 后重新运行以测试 LLM 功能")
 
 

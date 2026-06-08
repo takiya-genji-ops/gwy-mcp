@@ -17,6 +17,13 @@ class ExamType(str, Enum):
     SELECTED_GRADUATE = "选调生"
     OTHER = "其他"
 
+    @classmethod
+    def _missing_(cls, value: object):
+        """支持英文别名，如 'PROVINCIAL' → '省考'"""
+        if isinstance(value, str):
+            return cls.__members__.get(value.upper())
+        return None
+
 
 class UserProfile(BaseModel):
     """用户个人画像，用于岗位匹配。"""
