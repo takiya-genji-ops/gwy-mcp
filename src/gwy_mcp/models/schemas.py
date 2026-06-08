@@ -108,3 +108,49 @@ class MatchResult(BaseModel):
         default_factory=list, description="不满足的条件"
     )
     suggestion: Optional[str] = Field(default=None, description="报考建议")
+
+# ---------------------------------------------------------------------------
+# 申论批改相关模型
+# ---------------------------------------------------------------------------
+
+class EssayType(str, Enum):
+    """申论题型。"""
+    SUMMARY = "概括题"
+    ANALYSIS = "分析题"
+    COUNTERMEASURE = "对策题"
+    BIG_ESSAY = "大作文"
+    COMPREHENSIVE = "综合题"
+
+
+class GradeDimension(BaseModel):
+    """单个评分维度。"""
+    name: str = Field(description="维度名称")
+    score: int = Field(description="该维度得分")
+    max_score: int = Field(description="该维度满分")
+    comment: str = Field(description="该维度评语（优点+不足+改进建议）")
+
+
+class ParagraphFeedback(BaseModel):
+    """逐段批注。"""
+    paragraph_index: int = Field(description="段落序号，从0开始")
+    paragraph_text: str = Field(description="段落原文（前50字概括）")
+    feedback: str = Field(description="该段批注（问题+修改建议）")
+    suggestion: str = Field(default="", description="改写建议")
+
+
+class EssayGradingResult(BaseModel):
+    """申论批改结果。"""
+    total_score: int = Field(description="总分")
+    max_score: int = Field(description="满分")
+    grade_level: str = Field(description="等级：一类文/二类文/三类文/四类文")
+    dimensions: list[GradeDimension] = Field(description="各维度评分明细")
+    paragraph_feedback: list[ParagraphFeedback] = Field(
+        default_factory=list, description="逐段批注"
+    )
+    overall_comment: str = Field(description="综合评语")
+    reference_comparison: str = Field(
+        default="", description="与参考范文的对比分析"
+    )
+    improvement_priority: list[str] = Field(
+        default_factory=list, description="优先改进项（按重要性排序）"
+    )

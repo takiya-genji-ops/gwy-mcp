@@ -16,6 +16,7 @@ from gwy_mcp.tools.position_match import match_positions
 from gwy_mcp.tools.user_profile import save_user_profile, load_user_profile
 from gwy_mcp.tools.parse_announcement import parse_announcement
 from gwy_mcp.llm.client import extract_positions_from_text
+from gwy_mcp.tools.essay_grade import grade_essay_answer, list_reference_essays
 
 # 初始化 FastMCP 实例
 mcp = FastMCP(
@@ -32,6 +33,9 @@ def register_tools() -> None:
     mcp.tool()(match_positions)
     mcp.tool()(save_user_profile)
     mcp.tool()(load_user_profile)
+
+    mcp.tool()(grade_essay_answer)
+    mcp.tool()(list_reference_essays)
 
     # 后续工具在此注册:
     # mcp.tool()(interview_simulate)
