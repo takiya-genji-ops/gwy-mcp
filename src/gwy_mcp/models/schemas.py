@@ -119,6 +119,7 @@ class EssayType(str, Enum):
     ANALYSIS = "分析题"
     COUNTERMEASURE = "对策题"
     BIG_ESSAY = "大作文"
+    PRACTICAL_WRITING = "应用文"
     COMPREHENSIVE = "综合题"
 
 
