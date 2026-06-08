@@ -1,41 +1,38 @@
-@echo off
+﻿@echo off
+chcp 65001 >nul 2>&1
 echo ============================================
-echo   gwy-mcp 公考助手
+echo   gwy-mcp Launcher
 echo ============================================
 echo.
 
-REM 检查 .env 文件
-if not exist ".env" (
-    echo [WARNING] 未找到 .env 文件，请创建并填入 DEEPSEEK_API_KEY
-    echo 可以复制 .env.example 并修改:
-    echo   copy .env.example .env
-    echo   然后编辑 .env 填入你的 API Key
+if not exist "..\.env" (
+    echo [WARN] No .env file found. Create one with your DEEPSEEK_API_KEY.
+    echo Copy .env.example and edit it: copy .env.example .env
     echo.
 )
 
-REM 安装依赖（首次运行）
-echo [1/2] 检查依赖...
+echo [1/2] Checking dependencies...
+cd /d "%~dp0.."
 pip install -e . fastapi uvicorn >nul 2>&1
 if %errorlevel% neq 0 (
-    echo [ERROR] 依赖安装失败，请检查 Python 和网络连接
+    echo [ERROR] Failed to install Python dependencies.
+    echo Make sure Python 3.10+ is installed: https://www.python.org/downloads/
     pause
     exit /b 1
 )
 
-REM 构建前端（如果还没构建）
 if not exist "desktop\frontend\dist\index.html" (
-    echo 构建前端...
+    echo Building frontend...
     cd desktop\frontend
     call npm install >nul 2>&1
     call npm run build >nul 2>&1
     cd ..\..
 )
 
-REM 启动
-echo [2/2] 启动服务...
+echo [2/2] Starting server...
 echo.
-echo 服务启动后，在浏览器打开: http://127.0.0.1:8711
-echo 按 Ctrl+C 停止服务
+echo Open in browser: http://127.0.0.1:8711
+echo Press Ctrl+C to stop.
 echo.
-python desktop/backend.py
+python desktop\backend.py
 pause
