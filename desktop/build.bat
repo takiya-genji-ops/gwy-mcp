@@ -7,7 +7,7 @@ echo.
 
 python --version >nul 2>&1
 if %errorlevel% neq 0 (
-    echo [ERROR] Python not found. Install Python 3.10+ first:
+    echo [ERROR] Python not found. Install Python 3.10+:
     echo https://www.python.org/downloads/
     pause
     exit /b 1
@@ -15,7 +15,7 @@ if %errorlevel% neq 0 (
 
 echo [1/4] Installing Python dependencies...
 cd /d "%~dp0.."
-pip install -e . fastapi uvicorn pyinstaller >nul 2>&1
+python -m pip install -e . fastapi uvicorn pyinstaller >nul 2>&1
 if %errorlevel% neq 0 (
     echo [ERROR] Failed to install dependencies.
     pause
@@ -34,7 +34,7 @@ if %errorlevel% neq 0 (
 
 echo [3/4] Packaging with PyInstaller...
 cd /d "%~dp0.."
-pyinstaller --onefile ^
+python -m PyInstaller --onefile ^
     --name "gwy-mcp" ^
     --add-data "desktop/frontend/dist;frontend/dist" ^
     --add-data "src;src" ^
@@ -59,6 +59,6 @@ if %errorlevel% neq 0 (
 echo.
 echo [4/4] Build complete!
 echo Output: dist\gwy-mcp.exe
-echo To run: double-click gwy-mcp.exe, then open http://127.0.0.1:8711
+echo Run it and open http://127.0.0.1:8711
 echo.
 pause

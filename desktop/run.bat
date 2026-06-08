@@ -7,16 +7,14 @@ echo.
 
 if not exist "..\.env" (
     echo [WARN] No .env file found. Create one with your DEEPSEEK_API_KEY.
-    echo Copy .env.example and edit it: copy .env.example .env
     echo.
 )
 
-echo [1/2] Checking dependencies...
+echo [1/2] Installing dependencies...
 cd /d "%~dp0.."
-pip install -e . fastapi uvicorn >nul 2>&1
+python -m pip install -e . fastapi uvicorn >nul 2>&1
 if %errorlevel% neq 0 (
-    echo [ERROR] Failed to install Python dependencies.
-    echo Make sure Python 3.10+ is installed: https://www.python.org/downloads/
+    echo [ERROR] Failed to install dependencies. Check Python and network.
     pause
     exit /b 1
 )
@@ -31,7 +29,7 @@ if not exist "desktop\frontend\dist\index.html" (
 
 echo [2/2] Starting server...
 echo.
-echo Open in browser: http://127.0.0.1:8711
+echo Open: http://127.0.0.1:8711
 echo Press Ctrl+C to stop.
 echo.
 python desktop\backend.py
