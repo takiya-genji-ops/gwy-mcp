@@ -32,6 +32,7 @@ app.add_middleware(
 )
 
 
+
 # ---------------------------------------------------------------------------
 # 请求模型
 # ---------------------------------------------------------------------------
@@ -158,6 +159,30 @@ async def load_profile():
     return profile.model_dump()
 
 
+# ---------------------------------------------------------------------------
+# 静态前端服务（必须在所有 API 路由之后注册）
+# ---------------------------------------------------------------------------
+from fastapi.responses import FileResponse as _FileResponse
+
+_frontend_dist = Path(__file__).resolve().parent / "frontend" / "dist"
+
+
+async def _serve_frontend(request):
+    """回退到 React index.html（SPA 路由支持）"""
+    if _frontend_dist.exists():
+        full_path = request.path_params.get("full_path", "")
+        fp = _frontend_dist / (full_path or "index.html")
+        if fp.exists() and fp.is_file():
+            return _FileResponse(str(fp))
+        return _FileResponse(str(_frontend_dist / "index.html"))
+    return {"error": "frontend not built. Run: cd desktop/frontend && npm run build"}
+
+
+# 注册 catch-all 路由（必须在所有 @app 路由之后）
+app.router.add_route("/{full_path:path}", _serve_frontend, methods=["GET"])
+
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="127.0.0.1", port=8711, log_level="info")
+

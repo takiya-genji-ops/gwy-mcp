@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { api, GradingResult } from "../api";
+import { api } from "../api";
+import type { GradingResult } from '../api';
 
 export default function EssayPage() {
   const [question, setQuestion] = useState("");

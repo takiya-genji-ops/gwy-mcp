@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { api, MatchResultItem } from "../api";
+import { api } from '../api';
+import type { MatchResultItem } from '../api';
 
 export default function MatchPage() {
   const [announcement, setAnnouncement] = useState("");
