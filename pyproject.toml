@@ -1,0 +1,56 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "gwy-mcp"
+version = "0.1.0"
+description = "公务员考试智能助手 MCP Server — 选岗匹配、申论批改、面试模拟"
+readme = "README.md"
+license = {text = "AGPL-3.0"}
+requires-python = ">=3.10"
+authors = [
+    {name = "gennji"}
+]
+keywords = ["mcp", "civil-service", "exam", "gongwuyuan"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "License :: OSI Approved :: GNU Affero General Public License v3",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Education",
+]
+
+dependencies = [
+    "mcp>=1.0.0",
+    "pydantic>=2.0",
+    "httpx>=0.27",
+    "pdfplumber>=0.11",
+    "python-dotenv>=1.0",
+    "anthropic>=0.30",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "pytest-asyncio>=0.24",
+    "ruff>=0.5",
+    "mypy>=1.11",
+]
+
+[project.scripts]
+gwy-mcp = "gwy_mcp.server:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/gwy_mcp"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
